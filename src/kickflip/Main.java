@@ -16,6 +16,7 @@ public class Main {
 						rs.getString("employeeNumber"));
 				System.out.println(out);
 			}
+			conn.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
