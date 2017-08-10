@@ -27,6 +27,18 @@ public class Database {
         return conn;
     }
 	
+	static Connection getConnection(String userName, String password) throws Exception {
+		String url = "jdbc:mysql://192.168.1.117/";
+		String dbName = "kickflip";
+		String driver = "com.mysql.jdbc.Driver";
+		String useSSL = "?useSSL=false";
+
+		Class.forName(driver).newInstance();
+		Connection conn = DriverManager.getConnection(url + dbName + useSSL, userName, password);
+
+		return conn;
+	}
+	
 	public static void closeConnection(Connection conn) {
 
         try {
