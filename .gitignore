@@ -39,6 +39,8 @@ local.properties
 # Tern plugin
 .tern-project
 
+.DS_Store
+
 # TeXlipse plugin
 .texlipse
 
