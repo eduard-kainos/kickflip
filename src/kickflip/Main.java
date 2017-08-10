@@ -37,21 +37,21 @@ public class Main {
 					select();
 					break;
 				case 3:
+					insertSalesEmployee();
+					break;
+				case 4: 
+					employeeGrossPay();
+					break;
+				case 5:
+					highestSalesPeriod();
+					break;
+				case 6:
+					createProject();
+					break;
+				case 7:
 					System.out.println("Goodbye!");
 					repeatInt++;
 					System.exit(0);
-					break;
-				case 4:
-					insertSalesEmployee();
-					break;
-				case 5: 
-					employeeGrossPay();
-					break;
-				case 6:
-					highestSalesPeriod();
-					break;
-				case 7:
-					createProject();
 					break;
 				default:
 					break;
