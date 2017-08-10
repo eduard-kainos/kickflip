@@ -15,28 +15,37 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Test");
 
-		System.out.println(
-				"Please select an option:" + " \n1: Add an employee." + " \n2: Show employee table." + " \n3: Exit");
-
 		Scanner sc = new Scanner(System.in);
-
-		int option = sc.nextInt();
-		switch (option) {
-		case 1:
-			insertEmployee();
-			break;
-		case 2:
-			select();
-			break;
-		case 3:
-			System.out.println("Goodbye!");
-			System.exit(0);
-			break;
-		default:
-			break;
+		int repeatInt = 0;
+		
+		while (repeatInt == 0) {
+			printMenu();
+			int option = sc.nextInt();
+			switch (option) {
+			case 1: 
+				insertEmployee();
+				break;
+			case 2:
+				select();
+				break;
+			case 3:
+				System.out.println("Goodbye!");
+				repeatInt ++;
+				System.exit(0);
+				break;
+			default:
+				break;	
+			}
 		}
 		sc.close();
 	}
+	
+	public static void printMenu() {
+		System.out.println("Please select an option:"
+			+ " \n1: Add an employee."
+			+ " \n2: Show employee table."
+			+ " \n3: Exit");
+		}
 
 	public static void select() {
 		conn = null;
