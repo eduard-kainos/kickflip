@@ -1,6 +1,13 @@
 
 CREATE DATABASE IF NOT EXISTS kickflip;
 
+USE kickflip;
+
+CREATE TABLE IF NOT EXISTS department(
+	departmentID SMALLINT NOT NULL AUTO_INCREMENT,
+	departmentName VARCHAR(100),
+	PRIMARY KEY (departmentID)
+);
 
 CREATE TABLE IF NOT EXISTS employee (
     	employeeNumber SMALLINT NOT NULL AUTO_INCREMENT,
@@ -10,7 +17,9 @@ CREATE TABLE IF NOT EXISTS employee (
    	nin CHAR(9) NOT NULL,
     	bankAccountNo CHAR(8) NOT NULL,
 	sortCode CHAR(6) NOT NULL,
-    	PRIMARY KEY (employeeNumber)
+	departmentID SMALLINT NOT NULL,
+    	PRIMARY KEY (employeeNumber),
+	FOREIGN KEY (departmentID) REFERENCES department (departmentID)
 );
 
 CREATE TABLE IF NOT EXISTS project(
