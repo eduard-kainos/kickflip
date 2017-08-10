@@ -8,7 +8,7 @@ public class Main {
 		System.out.println("Test");
 		
 		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/kickflip", "root", "p@ssword");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.117/kickflip", "developer", "p@ssword1");
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery("SELECT employeeNumber, name FROM employee LIMIT 5");
 			while (rs.next()) {
