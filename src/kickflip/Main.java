@@ -12,23 +12,23 @@ public class Main {
 	private static String query;
 	private static PreparedStatement preparedStmt;
 	private static String username, password;
+	private static Boolean loggedin = false;
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int repeatInt = 0;
 
-		if (loginScreen(sc)) {
-
-			while (repeatInt == 0) {
+		while (repeatInt == 0) {
+			if (loggedin) {
 				printMenu();
 				String text = sc.nextLine();
 				int option = 0;
 				try {
 					option = Integer.parseInt(text);
-				}catch(Exception e){
+				} catch (Exception e) {
 					System.out.println("Wrong input.");
 				}
-				
+
 				switch (option) {
 				case 1:
 					insertEmployee();
@@ -46,8 +46,11 @@ public class Main {
 				default:
 					break;
 				}
+			}else {
+				loggedin = loginScreen(sc);
 			}
 		}
+
 		sc.close();
 	}
 
@@ -60,12 +63,11 @@ public class Main {
 
 		try {
 			conn = Database.getConnection(username, password);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} finally {
 			Database.closeConnection(conn);
 			System.out.println("Successful connection!");
+		} catch (Exception e) {
+			System.out.println("Connection refused.");
+			return false;
 		}
 
 		return true;
