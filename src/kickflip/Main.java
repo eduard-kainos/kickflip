@@ -11,44 +11,70 @@ public class Main {
 	private static ResultSet rs;
 	private static String query;
 	private static PreparedStatement preparedStmt;
+	private static String username, password;
 
 	public static void main(String[] args) {
-		System.out.println("Test");
-
 		Scanner sc = new Scanner(System.in);
 		int repeatInt = 0;
-		
-		while (repeatInt == 0) {
-			printMenu();
-			int option = sc.nextInt();
-			switch (option) {
-			case 1: 
-				insertEmployee();
-				break;
-			case 2:
-				select();
-				break;
-			case 3:
-				System.out.println("Goodbye!");
-				repeatInt ++;
-				System.exit(0);
-				break;
-			case 4:
-				insertSalesEmployee();
-			default:
-				break;	
+
+		if (loginScreen(sc)) {
+
+			while (repeatInt == 0) {
+				printMenu();
+				String text = sc.nextLine();
+				int option = 0;
+				try {
+					option = Integer.parseInt(text);
+				}catch(Exception e){
+					System.out.println("Wrong input.");
+				}
+				
+				switch (option) {
+				case 1:
+					insertEmployee();
+					break;
+				case 2:
+					select();
+					break;
+				case 3:
+					System.out.println("Goodbye!");
+					repeatInt++;
+					System.exit(0);
+					break;
+				case 4:
+					insertSalesEmployee();
+				default:
+					break;
+				}
 			}
 		}
 		sc.close();
 	}
-	
-	public static void printMenu() {
-		System.out.println("Please select an option:"
-			+ " \n1: Add an employee."
-			+ " \n2: Show employee table."
-			+ " \n3: Exit." 
-			+ " \n4: Add sales employee.");
+
+	public static boolean loginScreen(Scanner scan) {
+		System.out.println("Please login to system: \n");
+		System.out.println("Please enter your username: ");
+		username = scan.nextLine();
+		System.out.println("Please enter your pasword: ");
+		password = scan.nextLine();
+
+		try {
+			conn = Database.getConnection(username, password);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			Database.closeConnection(conn);
+			System.out.println("Successful connection!");
 		}
+
+		return true;
+	}
+
+	public static void printMenu() {
+		System.out.println("Please select an option:" + " \n1: Add an employee." + " \n2: Show employee table."
+				+ " \n3: Exit." + " \n4: Add sales employee.");
+	}
 
 	public static void select() {
 		conn = null;
@@ -57,17 +83,17 @@ public class Main {
 		query = "SELECT e.name, d.departmentName FROM employee e JOIN department d ON e.departmentID = d.departmentID ORDER BY d.departmentName;";
 
 		try {
-			conn = Database.getConnection();
+			conn = Database.getConnection(username, password);
 			statement = conn.prepareStatement(query);
 			rs = statement.executeQuery();
 
-			String department = "" , name, newDPT;
+			String department = "", name, newDPT;
 			while (rs.next()) {
 				name = rs.getString("name");
 				newDPT = rs.getString("departmentName");
-				if( !newDPT.equals(department)) {
+				if (!newDPT.equals(department)) {
 					department = newDPT;
-					System.out.println("\n ***** " + department + " ***** " );
+					System.out.println("\n ***** " + department + " ***** ");
 				}
 				System.out.println(" - " + name);
 			}
@@ -110,12 +136,13 @@ public class Main {
 		System.out.println("Please enter the employees sort code number (6 digits)");
 		String sortCode = sc.nextLine();
 
-		System.out.println("Please enter the employees department ID \n1 for Evolve \n2 for Enterprise \n3 for Government");
+		System.out.println(
+				"Please enter the employees department ID \n1 for Evolve \n2 for Enterprise \n3 for Government");
 		int departID = sc.nextInt();
 		sc.nextLine();
 
 		try {
-			conn = Database.getConnection();
+			conn = Database.getConnection(username, password);
 			statement = conn.prepareStatement(query);
 
 			// create the mysql insert preparedstatement
@@ -136,11 +163,10 @@ public class Main {
 			e.printStackTrace();
 		} finally {
 			Database.closeConnection(conn);
-			System.out.println( name + " has been successfully added.");
+			System.out.println(name + " has been successfully added.");
 		}
-		
+
 	}
-	
 
 	public static void insertSalesEmployee() {
 		conn = null;
@@ -172,25 +198,24 @@ public class Main {
 		System.out.println("Please enter the sales employees sort code number (6 digits)");
 		String sortCode = sc.nextLine();
 
-		System.out.println("Please enter the sales employees department ID \n1 for Evolve \n2 for Enterprise \n3 for Government");
+		System.out.println(
+				"Please enter the sales employees department ID \n1 for Evolve \n2 for Enterprise \n3 for Government");
 		int departID = sc.nextInt();
 		sc.nextLine();
-		
+
 		System.out.println("Please enter the sales employee commission rate");
-		BigDecimal  commission = sc.nextBigDecimal();
+		BigDecimal commission = sc.nextBigDecimal();
 		sc.nextLine();
-		
+
 		System.out.println("Please enter the sales employee sales total");
-		BigDecimal  salesTotal = sc.nextBigDecimal();
+		BigDecimal salesTotal = sc.nextBigDecimal();
 		sc.nextLine();
-		
-		String query2 = "INSERT INTO "
-				+ "salesEmployee(employeeNumber, commissionRate, salesTotal)"
+
+		String query2 = "INSERT INTO " + "salesEmployee(employeeNumber, commissionRate, salesTotal)"
 				+ "VALUES (?, ?, ?);";
-		
 
 		try {
-			conn = Database.getConnection();
+			conn = Database.getConnection(username, password);
 			statement = conn.prepareStatement(query);
 
 			// create the mysql insert preparedstatement
@@ -208,27 +233,27 @@ public class Main {
 
 			ResultSet resultSet = preparedStmt.getGeneratedKeys();
 			int empNumCurrent = 0;
-		
-			while(resultSet.next()) {
+
+			while (resultSet.next()) {
 				empNumCurrent = resultSet.getInt(1);
 			}
-			
+
 			statement = conn.prepareStatement(query2);
 			preparedStmt = conn.prepareStatement(query2);
 			preparedStmt.setInt(1, empNumCurrent);
 			preparedStmt.setBigDecimal(2, commission);
 			preparedStmt.setBigDecimal(3, salesTotal);
-			 
+
 			preparedStmt.execute();
-			
+
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			Database.closeConnection(conn);
-			System.out.println( name + " has been successfully added.");
+			System.out.println(name + " has been successfully added.");
 		}
-		
+
 	}
 }
