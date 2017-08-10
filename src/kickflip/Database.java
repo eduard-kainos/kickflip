@@ -13,22 +13,10 @@ public class Database {
 
 	private Connection conn;
 	private Statement st;
-
-	static Connection getConnection() throws Exception {
-        String url = "jdbc:mysql://192.168.1.117/";
-        String dbName = "kickflip";
-        String driver = "com.mysql.jdbc.Driver";
-        String userName = "developer";
-        String password = "p@ssword1";
-
-        Class.forName(driver).newInstance();
-        Connection conn = DriverManager.getConnection(url + dbName, userName,password);
-
-        return conn;
-    }
 	
 	static Connection getConnection(String userName, String password) throws Exception {
-		String url = "jdbc:mysql://192.168.1.117/";
+//		String url = "jdbc:mysql://192.168.1.117/";
+		String url = "jdbc:mysql://localhost/";
 		String dbName = "kickflip";
 		String driver = "com.mysql.jdbc.Driver";
 		String useSSL = "?useSSL=false";

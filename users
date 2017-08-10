@@ -1,0 +1,40 @@
+CREATE VIEW PeopleTeam as
+SELECT e.name, d.departmentName FROM employee e JOIN department d ON e.departmentID = d.departmentID ORDER BY d.departmentName;
+
+CREATE VIEW FinanceTeam as
+Select e.name, ((e.initialSalary / 12) * 0.75) AS 'Gross Pay' from employee e union SELECT e.name, (((e.initialSalary / 12) * 0.75) + (s.commissionRate * s.salesTotal)) AS 'Gross Pay' from employee e JOIN salesEmployee s ON e.employeeNumber = s.employeeNumber;
+
+
+CREATE VIEW SalesTeam as
+SELECT employee.name, employeeNumber, salesTotal  FROM salesEmployee JOIN employee  using(employeeNumber) WHERE salesTotal = (SELECT MAX(salesTotal) FROM salesEmployee);
+
+
+DROP USER IF EXISTS developer;
+DROP USER IF EXISTS SalesTeam;
+DROP USER IF EXISTS FinanceTeam;
+DROP USER IF EXISTS TalentManager;
+DROP USER IF EXISTS PeopleTeam;
+
+
+CREATE USER developer@'%' IDENTIFIED BY 'passDEV';
+GRANT select on kickflip.* to developer@'%';
+
+CREATE USER SalesTeam@'%' IDENTIFIED BY 'passST';
+GRANT select on kickflip.SalesTeam to SalesTeam@'%';
+
+CREATE USER FinanceTeam@'%' IDENTIFIED BY 'passFT';
+GRANT select on kickflip.FinanceTeam to FinanceTeam@'%';
+
+CREATE USER TalentManager@'%' IDENTIFIED BY 'passTM';
+GRANT select,insert on kickflip.project to TalentManager@'%';
+
+
+CREATE USER PeopleTeam@'%' IDENTIFIED BY 'passPT';
+GRANT select, insert on kickflip.employee to PeopleTeam@'%';
+GRANT select, insert on kickflip.salesEmployee to PeopleTeam@'%';
+GRANT select on kickflip.department to PeopleTeam@'%';
+GRANT select on kickflip.PeopleTeam to PeopleTeam@'%';
+
+
+
+
