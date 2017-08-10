@@ -1,0 +1,42 @@
+
+CREATE DATABASE IF NOT EXISTS kickflip;
+
+
+CREATE TABLE IF NOT EXISTS employee (
+    	employeeNumber SMALLINT NOT NULL AUTO_INCREMENT,
+ 	name VARCHAR(100) NOT NULL,
+   	address VARCHAR(100) NOT NULL,
+    	initialSalary DECIMAL(11 , 2 ) NOT NULL,
+   	nin CHAR(9) NOT NULL,
+    	bankAccountNo CHAR(8) NOT NULL,
+	sortCode CHAR(6) NOT NULL,
+    	PRIMARY KEY (employeeNumber)
+);
+
+CREATE TABLE IF NOT EXISTS project(
+	projectID SMALLINT NOT NULL AUTO_INCREMENT,
+	projectName VARCHAR(100) NOT NULL,
+	PRIMARY KEY (projectID)
+);
+
+CREATE TABLE IF NOT EXISTS assignment( 
+	assignmentID SMALLINT NOT NULL AUTO_INCREMENT,
+	projectID SMALLINT NOT NULL,
+	employeeNumber SMALLINT NOT NULL,
+	startDate DATE NOT NULL,
+	endDate DATE,
+	PRIMARY KEY (assignmentID),
+	FOREIGN KEY (projectID) REFERENCES project (projectID),
+	FOREIGN KEY (employeeNumber) REFERENCES employee (employeeNumber)
+);
+
+CREATE TABLE IF NOT EXISTS salesEmployee( 
+	employeeNumber SMALLINT,
+	commissionRate FLOAT,
+	salesTotal FLOAT,
+	PRIMARY KEY (employeeNumber),
+	FOREIGN KEY (employeeNumber) REFERENCES employee (employeeNumber)
+);
+
+
+
