@@ -107,7 +107,7 @@ public class Main {
 		System.out.println("Please enter the employees sort code number");
 		String sortCode = sc.nextLine();
 
-		System.out.println("Please enter the employees department ID");
+		System.out.println("Please enter the employees department ID \n1 for Evolve \n2 for Enterprise \n3 for Government");
 		int departID = sc.nextInt();
 		sc.nextLine();
 
