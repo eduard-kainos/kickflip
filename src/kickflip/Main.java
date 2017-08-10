@@ -42,17 +42,22 @@ public class Main {
 		conn = null;
 		statement = null;
 		rs = null;
-		query = "SELECT employeeNumber, name FROM employee";
+		query = "SELECT e.name, d.departmentName FROM employee e JOIN department d ON e.departmentID = d.departmentID ORDER BY d.departmentName;";
 
 		try {
 			conn = Database.getConnection();
 			statement = conn.prepareStatement(query);
 			rs = statement.executeQuery();
 
+			String department = "" , name, newDPT;
 			while (rs.next()) {
-				String out = String.format("%s has the following employee number: %s.", rs.getString("name"),
-						rs.getString("employeeNumber"));
-				System.out.println(out);
+				name = rs.getString("name");
+				newDPT = rs.getString("departmentName");
+				if( !newDPT.equals(department)) {
+					department = newDPT;
+					System.out.println("\n ***** " + department + " ***** " );
+				}
+				System.out.println(" - " + name);
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
